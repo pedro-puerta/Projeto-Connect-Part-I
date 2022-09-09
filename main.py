@@ -1,4 +1,3 @@
-from enum import unique
 from flask import Flask, render_template, request, request
 from flask_sqlalchemy import SQLAlchemy
 
