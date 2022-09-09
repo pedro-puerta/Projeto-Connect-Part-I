@@ -30,6 +30,10 @@ class Funcionarios(db.Model):
         db.session.commit()
         db.session.close()
 
+    def consultar_id_funcionario():
+        funcionario = Funcionarios.query.all()
+        return funcionario
+
 class Clientes(db.Model):
     id_cliente = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(45), nullable=False)
@@ -52,6 +56,9 @@ class Clientes(db.Model):
         db.session.commit()
         db.session.close()
 
+    def consultar_id_clientes():
+        clientes = Clientes.query.all()
+        return clientes
 
 class Equipamentos(db.Model):
     id_equipamento = db.Column(db.Integer, primary_key=True)
@@ -76,6 +83,10 @@ class Equipamentos(db.Model):
         equipamento.qtde = qtde
         db.session.commit()
         db.session.close()
+
+    def consultar_id_equipamentos():
+        equipamento = Equipamentos.query.all()
+        return equipamento
 
 
 @app.route('/')
@@ -161,10 +172,12 @@ def deletar_clientes():
     id = int(request.form.get("id"))
     if  not id >= 0:
         return 'Por favor, digite um código com números positivos'
-    else:
+    elif id in Clientes.consultar_id_clientes():
         Clientes.delete_cliente(id)
         clientes = Clientes.query.all()
         return render_template('consultaclientes.html', clientes=clientes)
+    else:
+        return "Id não encontrado, digite um id válido"
 
 @app.route('/deletefuncionarios')
 def get_deletar_funcionarios():
@@ -176,9 +189,11 @@ def deletar_funcionarios():
     Funcionarios.delete_funcionario(id)
     if  not id >= 0:
         return 'Por favor, digite um código com números positivos'
-    else:
+    elif id in Funcionarios.consultar_id_funcionario():
         funcionarios = Funcionarios.query.all()
         return render_template('consultafuncionarios.html', funcionarios=funcionarios)
+    else:
+        return "Id não encontrado, digite um id válido"
 
 @app.route('/deleteequipamento')
 def get_deletar_equipamentos():
@@ -189,10 +204,12 @@ def deletar_equipamentos():
     id = int(request.form.get("id"))
     if  not id >= 0:
         return 'Por favor, digite um código com números positivos'
-    else:
+    elif id in Equipamentos.consultar_id_equipamentos():
         Equipamentos.delete_equipamento(id)
         equipamentos = Equipamentos.query.all()
         return render_template('consultaequipamentos.html', equipamentos=equipamentos)
+    else:
+        return "Id não encontrado, digite um id válido"
 
 @app.route('/atualizarclientes')
 def get_atualizar_cliente():
@@ -207,10 +224,12 @@ def atualizar_cliente():
         return 'Por favor, digite somente letras no campo nome'
     elif nome.isalpha() == False:
         return 'Por favor, digite um id com número positivo'
-    else:
+    elif id in Clientes.consultar_id_clientes():
         Clientes.atualizar_clientes(id, nome, email)
         clientes = Clientes.query.all()
         return render_template('consultaclientes.html', clientes=clientes)
+    else:
+        return "Id não encontrado, digite um id válido"
 
 @app.route('/atualizarequipamentos')
 def get_atualizar_equipamento():
@@ -226,10 +245,12 @@ def atualizar_equipamento():
         return 'Por favor, digite somente letras no campo nome'
     elif nome.isalpha() == False:
         return 'Por favor, digite um id com número positivo'
-    else:
+    elif id in Equipamentos.consultar_id_equipamentos():
         Equipamentos.atualizar_equipamentos(id, nome, codigo, qtde)
         equipamentos = Equipamentos.query.all()
         return render_template('consultaequipamentos.html', equipamentos=equipamentos)
+    else:
+        return "Id não encontrado, digite um id válido"
 
 @app.route('/atualizarfuncionarios')
 def get_atualizar_funcionario():
@@ -245,10 +266,12 @@ def atualizar_funcionario():
         return 'Por favor, digite somente letras no campo nome'
     elif nome.isalpha() == False:
         return 'Por favor, digite um id com número positivo'
-    else:
+    elif id in Funcionarios.consultar_id_funcionario():
         Funcionarios.atualizar_funcionarios(id, nome, email)
         funcionarios = Funcionarios.query.all()
         return render_template('consultafuncionarios.html', funcionarios=funcionarios)
+    else:
+        return "Id não encontrado, digite um id válido"
 
 if __name__ =="__main__":
 	db.create_all()
