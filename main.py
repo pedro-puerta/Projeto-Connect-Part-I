@@ -31,8 +31,11 @@ class Funcionarios(db.Model):
         db.session.close()
 
     def consultar_id_funcionario():
-        funcionario = Funcionarios.query.all()
-        return funcionario
+        lista_id = []
+        id_funcionarios = db.session.query(Funcionarios.id_funcionario).all()
+        for i in id_funcionarios:
+            lista_id.append(i[0])
+        return lista_id
 
 class Clientes(db.Model):
     id_cliente = db.Column(db.Integer, primary_key=True)
@@ -57,8 +60,11 @@ class Clientes(db.Model):
         db.session.close()
 
     def consultar_id_clientes():
-        clientes = Clientes.query.all()
-        return clientes
+        lista_id = []
+        id_clientes = db.session.query(Clientes.id_cliente).all()
+        for i in id_clientes:
+            lista_id.append(i[0])
+        return lista_id
 
 class Equipamentos(db.Model):
     id_equipamento = db.Column(db.Integer, primary_key=True)
@@ -85,9 +91,11 @@ class Equipamentos(db.Model):
         db.session.close()
 
     def consultar_id_equipamentos():
-        equipamento = Equipamentos.query.all()
-        return equipamento
-
+        lista_id = []
+        id_equipamentos = db.session.query(Equipamentos.id_equipamento).all()
+        for i in id_equipamentos:
+            lista_id.append(i[0])
+        return lista_id
 
 @app.route('/')
 def main():
@@ -170,8 +178,8 @@ def get_deletar_clientes():
 @app.route('/deleteclientes', methods=["POST"])
 def deletar_clientes():
     id = int(request.form.get("id"))
-    if  not id >= 0:
-        return 'Por favor, digite um código com números positivos'
+    if  id <= 0:
+        return 'Por favor, digite somente números positivos no campo id.'
     elif id in Clientes.consultar_id_clientes():
         Clientes.delete_cliente(id)
         clientes = Clientes.query.all()
@@ -186,10 +194,10 @@ def get_deletar_funcionarios():
 @app.route('/deletefuncionarios', methods=["POST"])
 def deletar_funcionarios():
     id = int(request.form.get("id"))
-    Funcionarios.delete_funcionario(id)
-    if  not id >= 0:
-        return 'Por favor, digite um código com números positivos'
+    if  id <= 0:
+        return 'Por favor, digite somente números positivos no campo id.'
     elif id in Funcionarios.consultar_id_funcionario():
+        Funcionarios.delete_funcionario(id)
         funcionarios = Funcionarios.query.all()
         return render_template('consultafuncionarios.html', funcionarios=funcionarios)
     else:
@@ -203,7 +211,7 @@ def get_deletar_equipamentos():
 def deletar_equipamentos():
     id = int(request.form.get("id"))
     if  not id >= 0:
-        return 'Por favor, digite um código com números positivos'
+        return 'Por favor, digite somente números positivos no campo id.'
     elif id in Equipamentos.consultar_id_equipamentos():
         Equipamentos.delete_equipamento(id)
         equipamentos = Equipamentos.query.all()
@@ -221,7 +229,7 @@ def atualizar_cliente():
     nome = request.form.get("nome")
     email = request.form.get("email")
     if not id >= 0:
-        return 'Por favor, digite somente letras no campo nome'
+        return 'Por favor, digite somente números positivos no campo id.'
     elif nome.isalpha() == False:
         return 'Por favor, digite um id com número positivo'
     elif id in Clientes.consultar_id_clientes():
@@ -229,7 +237,7 @@ def atualizar_cliente():
         clientes = Clientes.query.all()
         return render_template('consultaclientes.html', clientes=clientes)
     else:
-        return "Id não encontrado, digite um id válido"
+        return "Id não encontrado, digite um id válido."
 
 @app.route('/atualizarequipamentos')
 def get_atualizar_equipamento():
@@ -242,7 +250,7 @@ def atualizar_equipamento():
     codigo = request.form.get("codigo") 
     qtde = request.form.get("qtde")
     if not id >= 0:
-        return 'Por favor, digite somente letras no campo nome'
+        return 'Por favor, digite somente números positivos no campo id.'
     elif nome.isalpha() == False:
         return 'Por favor, digite um id com número positivo'
     elif id in Equipamentos.consultar_id_equipamentos():
@@ -261,9 +269,8 @@ def atualizar_funcionario():
     id = int(request.form.get("id"))
     nome = request.form.get("nome")
     email = request.form.get("email")
-
     if not id >= 0:
-        return 'Por favor, digite somente letras no campo nome'
+        return 'Por favor, digite somente números positivos no campo id.'
     elif nome.isalpha() == False:
         return 'Por favor, digite um id com número positivo'
     elif id in Funcionarios.consultar_id_funcionario():
