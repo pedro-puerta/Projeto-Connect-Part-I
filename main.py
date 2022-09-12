@@ -110,7 +110,8 @@ def cadastrar_funcionarios():
     name = request.form.get("nome")
     email = request.form.get("email")
     senha = request.form.get("senha")
-    if name.isalpha() == False:
+    validador = name.replace(" ", "")
+    if not validador.isalpha():
         return 'Por favor, digite somente letras no campo nome'
     else:
         # class instance 
@@ -129,13 +130,14 @@ def get_clientes():
 def cadastrar_clientes():
     name = request.form.get("nome")
     email = request.form.get("email")
-    if name.isalpha() == True:
+    validador = name.replace(" ", "")
+    if not validador.isalpha():
+        return 'Por favor, digite somente letras no campo nome'
+    else:
         cliente = Clientes(name=name, email=email)
         cliente.create_cliente()
         clientes = Clientes.query.all()
         return render_template('consultaclientes.html', clientes=clientes)
-    else:
-        return 'Por favor, digite somente letras no campo nome'
 
 @app.route('/cadastrarequipamentos')
 def get_equipamentos():
@@ -146,7 +148,7 @@ def cadastrar_equipamentos():
     name = request.form.get("nome")
     codigo = int(request.form.get("codigo"))
     qtde = int(request.form.get("qtde"))
-    if name.isalpha() == False:
+    if not name.isalnum():
         return 'Por favor, digite somente letras no campo nome'
     elif  not codigo >= 0:
         return 'Por favor, digite um código com números positivos'
@@ -228,10 +230,11 @@ def atualizar_cliente():
     id = int(request.form.get("id"))
     nome = request.form.get("nome")
     email = request.form.get("email")
-    if not id >= 0:
+    validador = nome.replace(" ", "")
+    if not validador.isalpha():
+        return 'Por favor, digite somente letras no campo nome'
+    elif not id >= 0:
         return 'Por favor, digite somente números positivos no campo id.'
-    elif nome.isalpha() == False:
-        return 'Por favor, digite um id com número positivo'
     elif id in Clientes.consultar_id_clientes():
         Clientes.atualizar_clientes(id, nome, email)
         clientes = Clientes.query.all()
@@ -249,7 +252,9 @@ def atualizar_equipamento():
     nome = request.form.get("nome")
     codigo = request.form.get("codigo") 
     qtde = request.form.get("qtde")
-    if not id >= 0:
+    if not nome.isalnum():
+        return 'Por favor, digite somente letras no campo nome'
+    elif not id >= 0:
         return 'Por favor, digite somente números positivos no campo id.'
     elif nome.isalpha() == False:
         return 'Por favor, digite um id com número positivo'
@@ -269,7 +274,10 @@ def atualizar_funcionario():
     id = int(request.form.get("id"))
     nome = request.form.get("nome")
     email = request.form.get("email")
-    if not id >= 0:
+    validador = nome.replace(" ", "")
+    if not validador.isalpha():
+        return 'Por favor, digite somente letras no campo nome'
+    elif not id >= 0:
         return 'Por favor, digite somente números positivos no campo id.'
     elif nome.isalpha() == False:
         return 'Por favor, digite um id com número positivo'
