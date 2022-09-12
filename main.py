@@ -113,7 +113,7 @@ def cadastrar_funcionarios():
     validador = name.replace(" ", "")
     if not validador.isalpha():
         message = "Por favor, digite somente letras no campo nome"
-        return render_template("erro.html", message=message)
+        return render_template("cadastrarfuncionarios.html", message=message)
     else:
         # class instance 
         funcionario = Funcionarios(name=name, email=email, senha=senha)
@@ -133,8 +133,8 @@ def cadastrar_clientes():
     email = request.form.get("email")
     validador = name.replace(" ", "")
     if not validador.isalpha():
-        message = "Por favor, digite somente letras no campo nome"
-        return render_template("erro.html", message=message)
+        message = "Por favor, digite somente letras no campo nome."
+        return render_template("cadastrarclientes.html", message=message)
     else:
         cliente = Clientes(name=name, email=email)
         cliente.create_cliente()
@@ -152,9 +152,10 @@ def cadastrar_equipamentos():
     qtde = int(request.form.get("qtde"))
     if not name.isalnum():
         message = "Por favor, digite somente letras no campo nome"
-        return render_template("erro.html", message=message)
+        return render_template("cadastrarequipamentos.html", message=message)
     elif  not codigo >= 0:
-        return 'Por favor, digite um código com números positivos'
+        message = "Por favor, digite um código com números positivos"
+        return render_template("cadastrarequipamentos.html", message=message)
     else:
         equipamento = Equipamentos(name=name, codigo=codigo, qtde=qtde)
         equipamento.create_equipamento()
@@ -185,14 +186,14 @@ def deletar_clientes():
     id = int(request.form.get("id"))
     if  id <= 0:
         message = "Por favor, digite somente números positivos no campo id."
-        return render_template("erro.html", message=message)
+        return render_template("deleteclientes.html", message=message)
     elif id in Clientes.consultar_id_clientes():
         Clientes.delete_cliente(id)
         clientes = Clientes.query.all()
         return render_template('consultaclientes.html', clientes=clientes)
     else:
         message = "Id não encontrado, digite um id válido."
-        return render_template("erro.html", message=message)
+        return render_template("deleteclientes.html", message=message)
 
 @app.route('/deletefuncionarios')
 def get_deletar_funcionarios():
@@ -203,14 +204,14 @@ def deletar_funcionarios():
     id = int(request.form.get("id"))
     if  id <= 0:
         message = "Por favor, digite somente números positivos no campo id."
-        return render_template("erro.html", message=message)
+        return render_template("deletefuncionarios.html", message=message)
     elif id in Funcionarios.consultar_id_funcionario():
         Funcionarios.delete_funcionario(id)
         funcionarios = Funcionarios.query.all()
         return render_template('consultafuncionarios.html', funcionarios=funcionarios)
     else:
         message = "Id não encontrado, digite um id válido."
-        return render_template("erro.html", message=message)
+        return render_template("deletefuncionarios.html", message=message)
 
 @app.route('/deleteequipamento')
 def get_deletar_equipamentos():
@@ -221,14 +222,14 @@ def deletar_equipamentos():
     id = int(request.form.get("id"))
     if  not id >= 0:
         message = "Por favor, digite somente números positivos no campo id."
-        return render_template("erro.html", message=message)
+        return render_template("deleteequipamentos.html", message=message)
     elif id in Equipamentos.consultar_id_equipamentos():
         Equipamentos.delete_equipamento(id)
         equipamentos = Equipamentos.query.all()
         return render_template('consultaequipamentos.html', equipamentos=equipamentos)
     else:
         message = "Id não encontrado, digite um id válido."
-        return render_template("erro.html", message=message)
+        return render_template("deleteequipamentos.html", message=message)
 
 @app.route('/atualizarclientes')
 def get_atualizar_cliente():
@@ -242,17 +243,17 @@ def atualizar_cliente():
     validador = nome.replace(" ", "")
     if not validador.isalpha():
         message = "Por favor, digite somente letras no campo nome."
-        return render_template("erro.html", message=message)
+        return render_template("atualizarclientes.html", message=message)
     elif not id >= 0:
         message = "Por favor, digite somente números positivos no campo id."
-        return render_template("erro.html", message=message)
+        return render_template("atualizarclientes.html", message=message)
     elif id in Clientes.consultar_id_clientes():
         Clientes.atualizar_clientes(id, nome, email)
         clientes = Clientes.query.all()
         return render_template('consultaclientes.html', clientes=clientes)
     else:
         message = "Id não encontrado, digite um id válido."
-        return render_template("erro.html", message=message)
+        return render_template("atualizarclientes.html", message=message)
 
 @app.route('/atualizarequipamentos')
 def get_atualizar_equipamento():
@@ -266,13 +267,13 @@ def atualizar_equipamento():
     qtde = request.form.get("qtde")
     if not nome.isalnum():
         message = "Por favor, digite somente letras no campo nome."
-        return render_template("erro.html", message=message)
+        return render_template("atualizarequipamentos.html", message=message)
     elif not id >= 0:
         message = "Por favor, digite somente números positivos no campo id."
-        return render_template("erro.html", message=message)
+        return render_template("atualizarequipamentos.html", message=message)
     elif nome.isalpha() == False:
         message = "Por favor, digite um id com número positivo"
-        return render_template("erro.html", message=message)
+        return render_template("atualizarequipamentos.html", message=message)
     elif id in Equipamentos.consultar_id_equipamentos():
         Equipamentos.atualizar_equipamentos(id, nome, codigo, qtde)
         equipamentos = Equipamentos.query.all()
@@ -292,20 +293,20 @@ def atualizar_funcionario():
     validador = nome.replace(" ", "")
     if not validador.isalpha():
         message = "Por favor, digite somente letras no campo nome"
-        return render_template("erro.html", message=message)
+        return render_template("atualizarfuncionarios.html", message=message)
     elif not id >= 0:
         message = "Por favor, digite somente números positivos no campo id."
-        return render_template("erro.html", message=message)
+        return render_template("atualizarfuncionarios.html", message=message)
     elif nome.isalpha() == False:
         message = "Por favor, digite um id com número positivo."
-        return render_template("erro.html", message=message)    
+        return render_template("atualizarfuncionarios.html", message=message)    
     elif id in Funcionarios.consultar_id_funcionario():
         Funcionarios.atualizar_funcionarios(id, nome, email)
         funcionarios = Funcionarios.query.all()
         return render_template('consultafuncionarios.html', funcionarios=funcionarios)
     else:
         message = "Id não encontrado, digite um id válido"
-        return render_template("erro.html", message=message) 
+        return render_template("atualizarfuncionarios.html", message=message) 
 
 if __name__ =="__main__":
 	db.create_all()
