@@ -1,5 +1,7 @@
 from flask import Flask, render_template, request, request
 from flask_sqlalchemy import SQLAlchemy
+from twitter import busca
+from envio import novos_clientes, clientes_antigo
 
 app = Flask(__name__)
 
@@ -65,6 +67,10 @@ class Clientes(db.Model):
         for i in id_clientes:
             lista_id.append(i[0])
         return lista_id
+    
+    def email_cliente_deletado(id):
+        email = Clientes.query.filter_by(id_cliente=id).first()
+        return email.email
 
 class Equipamentos(db.Model):
     id_equipamento = db.Column(db.Integer, primary_key=True)
@@ -115,7 +121,7 @@ def cadastrar_funcionarios():
         message = "Por favor, digite somente letras no campo nome"
         return render_template("cadastrarfuncionarios.html", message=message)
     else:
-        # class instance
+        # class instance 
         funcionario = Funcionarios(name=name, email=email, senha=senha)
         # crio o registro no banco
         funcionario.create_funcionario()
@@ -130,7 +136,7 @@ def get_clientes():
 @app.route('/cadastrarclientes', methods=["POST"])
 def cadastrar_clientes():
     name = request.form.get("nome")
-    email = request.form.get("email")
+    email = str(request.form.get("email"))
     validador = name.replace(" ", "")
     if not validador.isalpha():
         message = "Por favor, digite somente letras no campo nome."
@@ -139,6 +145,7 @@ def cadastrar_clientes():
         cliente = Clientes(name=name, email=email)
         cliente.create_cliente()
         clientes = Clientes.query.all()
+        novos_clientes(email)
         return render_template('consultaclientes.html', clientes=clientes)
 
 @app.route('/cadastrarequipamentos')
@@ -188,6 +195,8 @@ def deletar_clientes():
         message = "Por favor, digite somente números positivos no campo id."
         return render_template("deleteclientes.html", message=message)
     elif id in Clientes.consultar_id_clientes():
+        email = Clientes.email_cliente_deletado(id)
+        clientes_antigo(email)
         Clientes.delete_cliente(id)
         clientes = Clientes.query.all()
         return render_template('consultaclientes.html', clientes=clientes)
@@ -303,7 +312,12 @@ def atualizar_funcionario():
         return render_template('consultafuncionarios.html', funcionarios=funcionarios)
     else:
         message = "Id não encontrado, digite um id válido"
-        return render_template("atualizarfuncionarios.html", message=message) 
+        return render_template("atualizarfuncionarios.html", message=message)
+
+@app.route('/twitter')
+def twitter():
+    retorno_busca = busca()
+    return render_template('twitter.html', retorno_busca=retorno_busca)
 
 if __name__ =="__main__":
 	db.create_all()
