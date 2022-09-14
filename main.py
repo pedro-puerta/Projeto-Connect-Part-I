@@ -115,7 +115,7 @@ def cadastrar_funcionarios():
         message = "Por favor, digite somente letras no campo nome"
         return render_template("cadastrarfuncionarios.html", message=message)
     else:
-        # class instance 
+        # class instance
         funcionario = Funcionarios(name=name, email=email, senha=senha)
         # crio o registro no banco
         funcionario.create_funcionario()
@@ -259,7 +259,7 @@ def atualizar_cliente():
 def get_atualizar_equipamento():
     return render_template('atualizarequipamentos.html')
 
-@app.route('/atualizarequipamentos', methods=["GET", "POST"])
+@app.route('/atualizarequipamentos', methods=["POST"])
 def atualizar_equipamento():
     id = int(request.form.get("id"))
     nome = request.form.get("nome")
@@ -282,7 +282,7 @@ def atualizar_equipamento():
 def get_atualizar_funcionario():
     return render_template('atualizarfuncionarios.html')
 
-@app.route('/atualizarfuncionarios', methods=["GET", "POST"])
+@app.route('/atualizarfuncionarios', methods=["POST"])
 def atualizar_funcionario():
     id = int(request.form.get("id"))
     nome = request.form.get("nome")
