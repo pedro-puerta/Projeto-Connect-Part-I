@@ -150,11 +150,11 @@ def cadastrar_equipamentos():
     name = request.form.get("nome")
     codigo = int(request.form.get("codigo"))
     qtde = int(request.form.get("qtde"))
-    if not name.isalnum():
-        message = "Por favor, digite somente letras no campo nome"
-        return render_template("cadastrarequipamentos.html", message=message)
-    elif  not codigo >= 0:
+    if not codigo >= 0:
         message = "Por favor, digite um código com números positivos"
+        return render_template("cadastrarequipamentos.html", message=message)
+    elif not qtde >= 0:
+        message = "Por favor, digite a QDTE positiva para cadastrar no estoque"
         return render_template("cadastrarequipamentos.html", message=message)
     else:
         equipamento = Equipamentos(name=name, codigo=codigo, qtde=qtde)
@@ -264,15 +264,12 @@ def atualizar_equipamento():
     id = int(request.form.get("id"))
     nome = request.form.get("nome")
     codigo = request.form.get("codigo") 
-    qtde = request.form.get("qtde")
-    if not nome.isalnum():
-        message = "Por favor, digite somente letras no campo nome."
-        return render_template("atualizarequipamentos.html", message=message)
-    elif not id >= 0:
+    qtde = int(request.form.get("qtde"))
+    if not id >= 0:
         message = "Por favor, digite somente números positivos no campo id."
         return render_template("atualizarequipamentos.html", message=message)
-    elif nome.isalpha() == False:
-        message = "Por favor, digite um id com número positivo"
+    elif not qtde >= 0:
+        message = "Por favor, digite a QDTE positiva para cadastrar no estoque"
         return render_template("atualizarequipamentos.html", message=message)
     elif id in Equipamentos.consultar_id_equipamentos():
         Equipamentos.atualizar_equipamentos(id, nome, codigo, qtde)
