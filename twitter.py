@@ -10,6 +10,6 @@ cliente = tw.Client(bearer_token=bearer_token, consumer_key=consumer_key, consum
 
 def busca():
 
-    busca = cliente.search_recent_tweets(query='internet', max_results=30)
+    busca = cliente.search_recent_tweets(query='plano de internet', max_results=30)
 
     return busca
