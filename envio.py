@@ -10,15 +10,14 @@ def novos_clientes(destinatario):
     """
     msg = email.message.Message()
     msg['Subject'] = "SixConnect"
-    msg['From'] = 'adaltospjr@gmail.com'
+    msg['From'] = 'sixconnect.impacta@gmail.com'
     msg['To'] = f'{destinatario}'
-    password = 'eioovtdnuvpclftj' 
+    password = 'goghxrpjkizrxjou' 
     msg.add_header('Content-Type', 'text/html')
     msg.set_payload(corpo_email)
 
     s = smtplib.SMTP('smtp.gmail.com: 587')
     s.starttls()
-    # Login Credentials for sending the mail
     s.login(msg['From'], password)
     s.sendmail(msg['From'], [msg['To']], msg.as_string().encode('utf-8'))
 
@@ -31,14 +30,13 @@ def clientes_antigo(destinatario):
     """
     msg = email.message.Message()
     msg['Subject'] = "SixConnect"
-    msg['From'] = 'adaltospjr@gmail.com'
+    msg['From'] = 'sixconnect.impacta@gmail.com'
     msg['To'] = f'{destinatario}'
-    password = 'eioovtdnuvpclftj' 
+    password = 'goghxrpjkizrxjou' 
     msg.add_header('Content-Type', 'text/html')
     msg.set_payload(corpo_email)
 
     s = smtplib.SMTP('smtp.gmail.com: 587')
     s.starttls()
-    # Login Credentials for sending the mail
     s.login(msg['From'], password)
     s.sendmail(msg['From'], [msg['To']], msg.as_string().encode('utf-8'))

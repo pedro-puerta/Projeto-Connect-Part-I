@@ -1,6 +1,4 @@
 import tweepy as tw
-import pandas as pd
-import json
 
 bearer_token = 'AAAAAAAAAAAAAAAAAAAAACv%2BeAEAAAAA%2FCaj8X9MF3VIheMO5%2BPiVfr9Ago%3DsLhQpyb2kB023Ua2w6j0CqSYNqTxtB4IgCo0348ornUPquMPwz'
 consumer_key = 'nQ1oVFgRAwrMeFuDAlDKgtNaL'
@@ -12,16 +10,6 @@ cliente = tw.Client(bearer_token=bearer_token, consumer_key=consumer_key, consum
 
 def busca():
 
-    busca = cliente.search_recent_tweets(query='plano de internet', max_results=25)
+    busca = cliente.search_recent_tweets(query='internet', max_results=30)
 
     return busca
-
-#public_tweets = cliente.get_home_timeline()
-
-'''
-dados = busca.data
-
-tabela = pd.DataFrame(data=dados)
-
-tabela.to_excel('dados.xlsx')
-'''
