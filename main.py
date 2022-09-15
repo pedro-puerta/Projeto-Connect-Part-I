@@ -77,6 +77,7 @@ class Equipamentos(db.Model):
     name = db.Column(db.String(45), nullable=False)
     codigo = db.Column(db.Integer, nullable=False, unique=True)
     qtde = db.Column(db.Integer, nullable=False)
+    unidade_de_medida = db.Column(db.String(45), nullable=False)
 
     def create_equipamento(self):
         db.session.add(self)
@@ -88,11 +89,12 @@ class Equipamentos(db.Model):
         db.session.commit()
         db.session.close()
 
-    def atualizar_equipamentos(id, nome, codigo, qtde):
+    def atualizar_equipamentos(id, nome, codigo, qtde, unidade_de_medida):
         equipamento = Equipamentos.query.filter_by(id_equipamento=f'{id}').first()
         equipamento.codigo = codigo
         equipamento.name = nome
         equipamento.qtde = qtde
+        equipamento.unidade_de_medida = unidade_de_medida
         db.session.commit()
         db.session.close()
 
@@ -157,6 +159,7 @@ def cadastrar_equipamentos():
     name = request.form.get("nome")
     codigo = int(request.form.get("codigo"))
     qtde = int(request.form.get("qtde"))
+    unidade_de_medida = request.form.get("unidade_de_medida")
     if not codigo >= 0:
         message = "Por favor, digite um código com números positivos"
         return render_template("cadastrarequipamentos.html", message=message)
@@ -164,7 +167,7 @@ def cadastrar_equipamentos():
         message = "Por favor, digite a QDTE positiva para cadastrar no estoque"
         return render_template("cadastrarequipamentos.html", message=message)
     else:
-        equipamento = Equipamentos(name=name, codigo=codigo, qtde=qtde)
+        equipamento = Equipamentos(name=name, codigo=codigo, qtde=qtde, unidade_de_medida=unidade_de_medida)
         equipamento.create_equipamento()
         equipamentos = equipamento.query.all()
         return render_template('consultaequipamentos.html', equipamentos=equipamentos)
@@ -274,6 +277,7 @@ def atualizar_equipamento():
     nome = request.form.get("nome")
     codigo = request.form.get("codigo") 
     qtde = int(request.form.get("qtde"))
+    unidade_de_medida = request.form.get("unidade_de_medida")
     if not id >= 0:
         message = "Por favor, digite somente números positivos no campo id."
         return render_template("atualizarequipamentos.html", message=message)
@@ -281,7 +285,7 @@ def atualizar_equipamento():
         message = "Por favor, digite a QDTE positiva para cadastrar no estoque"
         return render_template("atualizarequipamentos.html", message=message)
     elif id in Equipamentos.consultar_id_equipamentos():
-        Equipamentos.atualizar_equipamentos(id, nome, codigo, qtde)
+        Equipamentos.atualizar_equipamentos(id, nome, codigo, qtde, unidade_de_medida)
         equipamentos = Equipamentos.query.all()
         return render_template('consultaequipamentos.html', equipamentos=equipamentos)
     else:
